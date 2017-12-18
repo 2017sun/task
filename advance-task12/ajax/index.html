@@ -46,46 +46,46 @@
     </ul>
     <a href="#" id="load-more" class="btn">加载更多</a>
 
-<script>
-    var ct = document.querySelector('#ct')
-    var btn = document.querySelector('#load-more')
-    var pageIndex = 3
+    <script>
+        var ct = document.querySelector('#ct')
+        var btn = document.querySelector('#load-more')
+        var pageIndex = 3
 
-    var isDataArrive = true; //设置状态锁,防止加载的数据回来之前用户重复点击
+        var isDataArrive = true; //设置状态锁,防止加载的数据回来之前用户重复点击
 
-    btn.addEventListener('click',function(e){   //防止a链接点击跳转到顶部
-        e.preventDefault()
-        if(!isDataArrive){
-            return;
-        }
-
-        var xhr = new XMLHttpRequest()
-        xhr.onreadystatechange = function(){
-            if(xhr.readyState === 4){
-                if(xhr.status === 200 || xhr.status === 304){
-                    var results = JSON.parse(xhr.responseText)
-                    console.log(results);
-                    var fragment = document.createDocumentFragment()
-                    for (var i = 0;i < results.length;i++) {
-                        var node = doncument.createElement('li')
-                        node.innerText = results[i]
-                        fragment.appendChild(node)
-                    }
-                    ct.appendChild(fragment)
-                    pageIndex = pageIndex + 5;
-                }else{
-                    alert('出错了')
-                }
-                isDataArrive = true;
+        btn.addEventListener('click',function(e){   //防止a链接点击跳转到顶部
+            e.preventDefault()
+            if(!isDataArrive){
+                return;
             }
-        }
 
-        //本地模拟
-        xhr.open('get','http://localhost:8080/loadMore?index=' + pageIndex + '&length=5', true)
-        xhr.send()
-        siDataArrive = false;   //等待数据到来,状态锁
-    })
-</script>
+            var xhr = new XMLHttpRequest()
+            xhr.onreadystatechange = function(){
+                if(xhr.readyState === 4){
+                    if(xhr.status === 200 || xhr.status === 304){
+                        var results = JSON.parse(xhr.responseText)
+                        console.log(results);
+                        var fragment = document.createDocumentFragment()
+                        for (var i = 0;i < results.length;i++) {
+                            var node = doncument.createElement('li')
+                            node.innerText = results[i]
+                            fragment.appendChild(node)
+                        }
+                        ct.appendChild(fragment)
+                        pageIndex = pageIndex + 5;
+                    }else{
+                        alert('出错了')
+                    }
+                    isDataArrive = true;
+                }
+            }
+
+            //本地模拟
+            xhr.open('get','http://localhost:8080/loadMore?index=' + pageIndex + '&length=5', true)
+            xhr.send()
+            siDataArrive = false;   //等待数据到来,状态锁
+        })
+    </script>
 
 </body>
 
