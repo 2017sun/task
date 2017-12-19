@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Load more</title>
+    <style>
+        #btn {
+            display: block;
+            margin: auto;
+            width: 120px;
+            height: 40px;
+
+            border: 1px solid red;
+            border-radius: 5px;
+            background-color: #fff;
+
+            font-size: 16px;
+        }
+
+        #btn:hover {
+            background: #eee;
+            color: red;
+        }
+
+
+        #ct {
+            padding: 0;
+        }
+
+
+        #ct li {
+            list-style: none;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 5px;
+            margin: 10px 10px 10px 10px;
+            cursor:pointer;
+
+        }
+    </style>
+</head>
+
+<body>
+<ul id="ct">
+    <li>0...</li>
+    <li>1...</li>
+    <li>2...</li>
+    <li>3...</li>
+    <li>4...</li>
+</ul>
+
+<button id="btn">Load more</button>
+
+
+<script>
+    btn = document.querySelector('#btn')
+    ul = document.querySelector('#ct')
+
+    var Index = 5
+    var isDataArrive = true
+
+    btn.addEventListener('click', function(e){
+        e.preventDefault()
+
+        if(!isDataArrive){
+            return
+        }
+
+        var xhr = new XMLHttpRequest();
+        xhr.onreadystatechange = function(result) {
+            if(xhr.readyState === 4){
+                if(xhr.status === 200 || xhr.status === 304){
+                    var docFragment = document.createDocumentFragment()
+                    for(var i=0; i<5; i++){
+                        var newLi = document.createElement('li')
+                        var newLiContent = document.createTextNode(Index + i)
+                        newLi.appendChild(newLiContent)
+                        docFragment.appendChild(newLi)
+                    }
+                    ul.appendChild(docFragment)
+
+                    Index += 5
+                    console.log(Index)
+                }
+                isDataArrive = true
+            }
+        }
+        xhr.open('GET', '/loadMore?index=' + Index + '&length=5')
+        xhr.send()
+        isDataArrive = false
+    })
+</script>
+</body>
+</html>

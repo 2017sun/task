@@ -1,7 +1,10 @@
 function setRouter(app){
     var router = app;
 
+//服务端  router.js
+
     app.get('/loadMore',function(req,res){
+
         var curIdx=req.query.index
         var len=req.query.length
         var data=[]
@@ -11,4 +14,4 @@ function setRouter(app){
         }
         res.send(data)
     })}
-    module.exports.setRouter = setRouter
+module.exports.setRouter = setRouter
