@@ -39,7 +39,7 @@
       color: #E27272;
     }
     .btn:hover{
-      background: green;
+      background: #00bfff;
       color: #fff;
     }
       </style>
@@ -68,61 +68,59 @@
   var ct = document.querySelector('#ct')
   var btn = document.querySelector('#load-more')
 
-  var curIndex = 0  //当前要加载的数据的序号
-  var len = 5   // 每次加载多少个数据
-  var isLoading = false  //状态锁，用于判断是否在加载数据
+  var curIndex = 0  //设置要加载的数据初始序号
+  var len = 5   // 每次加载数据个数
+  var isLoading = false   //加上状态锁防止用户重复点击
 
-  btn.addEventListener('click', function(e){
+  btn.addEventListener('click', function(e){   //添加按钮点击事件
     e.preventDefault();  //防止点击 a 链接页面跳到顶部
 
     if(isLoading) {
-      return   //如果正在请求数据，那这次点击什么都不做
+      return   //如果正在请求数据，点击无效
     }
+    isLoading = true
 
-    //执行到这里说明 没有正在发出的请求，那后面就可以发请求
-    isLoading = true   //发请求之前做个标记加锁
-    ajax('/loadMore', {
+    ajax('/loadMore', {    //调用封装的ajax函数
       idx: curIndex,
       len: len
-    }, function(data){
-      appendData(data)
-      isLoading = false   //数据到来之后 解
-      curIndex = curIndex + len  //修改序号，下次要数据就从新序号开始要
+    }, function(data){   //数据data传进来
+      appendData(data)     //添加5个li
+      isLoading = false   //数据到来之后解锁,后面就能继续点击
+      curIndex = curIndex + len  //点击第一次的数据到来后,修改序号，此时curIndex由0变成5
       console.log(curIndex)
     })
  
   }) 
 
 
-  function ajax(url, json, onSuccess, onError) {
+  function ajax(url, json, onSuccess, onError) {    //封装一个ajax,方便上面调用,参数有url,json,onSuccess,onError
     var xhr = new XMLHttpRequest()
     var arr = []
-    for (key in json) {
-      arr.push(key + '=' + json[key])
+    for (key in json) {   //遍历传进来的json参数即上面的{idx: curIndex,len: len}
+      arr.push(key + '=' + json[key]) //拼成[idx=curIndex,len=len] 即第一次为 ["idx=0","len=5"]
     }
-    url += '?' + arr.join('&')
-    xhr.open('get', url)
+    url += '?' + arr.join('&')   //拼装要请求的url,即url = "/loadMore?idx=0&len=5"
+    xhr.open('get', url)    //get请求方式,请求"/loadMore?idx=0&len=5"
     xhr.send()
 
-     xhr.onload = function(){
+     xhr.onload = function(){            //数据到来之后此时返回的data = ["新闻0","新闻1","新闻2","新闻3","新闻4"]
       if((xhr.status >= 200 && xhr.status < 300) || xhr.status == 304){
-        onSuccess(JSON.parse(this.response))
+        onSuccess(JSON.parse(this.response))  //把json格式字符串转换成对象
       }else{
-        onError && onError()
+        onError && onError() //没有数据返回报错
       }
     }
   }
 
 
-  function appendData(data){
+  function appendData(data){     //封装一个appendData函数,第一次点击后数据过来此时data = ["新闻0","新闻1","新闻2","新闻3","新闻4"]
     for(var i = 0; i<data.length; i++){
-      var child = document.createElement('li')
-      child.innerText = data[i]
-      ct.appendChild(child)
+      var child = document.createElement('li')  //添加5个li
+      child.innerText = data[i]  //第一次点击后5个li的文本内容即"新闻0","新闻1","新闻2","新闻3","新闻4"
+      ct.appendChild(child)  //放在ct里的最后面
     }
   }
-  
-  
-      
+
+
     </script>
 </html>
