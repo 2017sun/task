@@ -7,7 +7,7 @@ var len = 6 // 每次加载多少个数据
 var isLoading = false //状态锁，用于判断是否在加载数据,防止用户重复点击
 
 $btn.on('click', function(e) {
-    var cur = $('#content').children('.ele').length + 1; //要加载的首序号,两个子元素所以加1为3
+    var cur = $('#content').children().length + 1; //要加载的首序号,两个子元素所以加1为3
 
     if ($(this).data('isLoading')) { //获取一个状态锁,如果正在请求数据,什么也不做
         return;
@@ -50,7 +50,7 @@ function onError() {
 
 function append(arr) {
     for (var i = 0; i < arr.length; i++) {
-        $ct.append('<li class="ele">' + arr[i] + '</li>')
+        $ct.append('<li>' + arr[i] + '</li>')
     }
 }
 

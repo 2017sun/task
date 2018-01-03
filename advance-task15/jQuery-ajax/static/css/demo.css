@@ -6,6 +6,7 @@ ul {
 
 #content li {
     border: 1px solid #ccc;
+    border-radius: 3px;
     padding: 10px;
     margin-top: 10px;
     cursor: pointer;
