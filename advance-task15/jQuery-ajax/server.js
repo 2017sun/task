@@ -4,18 +4,18 @@ var url = require('url');
 var path = require('path');
 
 function routePath(req, res) {
-    var pathObj = url.parse(req.url, true);
-    console.log(pathObj);
+    var pathObj = url.parse(req.url, true);//解析url,将一个URL字符串转换成对象并返回。
+    console.log(pathObj); //此时为/loadMore
 
     switch (pathObj.pathname) {
         case '/loadMore':
-            var curIdx = pathObj.query.curIndex
-            var len = pathObj.query.len
+            var curIdx = pathObj.query.curIndex  //第一次为'3',注意这里此时的pathObj.query = {curIndex: '3'.len: '6'}
+            var len = pathObj.query.len// 6
             var status = 0
             var content = []
             var ret
             for (var i = 0; i < len; i++) {
-                content.push('内容' + (parseInt(curIdx) + i))
+                content.push('内容' + (parseInt(curIdx) + i))  //parseInt() 函数可解析一个字符串，并返回一个整数
             }
             ret = {
                 status: 1,
@@ -23,10 +23,7 @@ function routePath(req, res) {
             }
 
             res.setHeader('Content-Type', 'text/plain; charset=utf-8')
-            setTimeout(function() { res.end(JSON.stringify(ret)) }, 2000)
-
-            /*res.setHeader('Content-Type', 'text/plain; charset=utf-8')
-             setTimeout(function() { res.end(JSON.stringify(data)) }, 2000)*/
+            setTimeout(function() { res.end(JSON.stringify(ret)) }, 2000)  //返回json格式字符串
 
             break;
         default:
@@ -38,13 +35,13 @@ function routePath(req, res) {
 
 function staticRoot(staticPath, req, res) {
     var pathObj = url.parse(req.url, true)
-    if (pathObj.pathname === '/') {
-        pathObj.pathname += 'index.html'
+    if (pathObj.pathname === '/') {   //如果直接输入的是local:8080
+        pathObj.pathname += 'index.html' //默认读取index.html文件
     }
     var filePath = path.join(staticPath, pathObj.pathname)
     fs.readFile(filePath, 'binary', function(err, content) {
         if (err) {
-            res.writeHead('404', 'haha Not Found')
+            res.writeHead('404', 'Not Found')
             return res.end()
         }
 
