@@ -5,7 +5,7 @@ var path = require('path');
 
 function routePath(req, res) {
     var pathObj = url.parse(req.url, true);//解析url,将一个URL字符串转换成对象并返回。
-    console.log(pathObj); //此时为/loadMore
+    console.log(pathObj);
 
     switch (pathObj.pathname) {
         case '/loadMore':
