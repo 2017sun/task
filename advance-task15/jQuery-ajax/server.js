@@ -9,7 +9,7 @@ function routePath(req, res) {
 
     switch (pathObj.pathname) {
         case '/loadMore':
-            var curIdx = pathObj.query.curIndex  //第一次为'3',注意这里此时的pathObj.query = {curIndex: '3'.len: '6'}
+            var curIdx = pathObj.query.curIndex  //第一次为'3',注意这里此时的pathObj.query = {curIndex: '3', len: '6'}
             var len = pathObj.query.len// 6
             var status = 0
             var content = []
